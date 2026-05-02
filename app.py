@@ -78,7 +78,7 @@ def plot_heatmap(gdf, geojson):
         geojson=geojson,
         locations=gdf.index,
         map_style="basic",
-        zoom=10,
+        zoom=12,
         center={"lat": df["lat"].mean(), "lon": df["lon"].mean()},
         opacity=0.8
     )
@@ -110,7 +110,7 @@ def plot_area(df):
 
 # --- STREAMLIT ---
 
-st.title("Helsinki Traffic Safety Analysis")
+st.title("Helsinki Traffic Safety Visualizer")
 
 option = st.selectbox(
     "Filter by accident type",
@@ -122,6 +122,13 @@ gdf = get_gdf(df)
 geojson = get_geojson(gdf)
 
 st.plotly_chart(plot_heatmap(gdf, geojson), width='stretch', theme=None)
+
+st.markdown("""
+Accident data from 2000-2025.
+Source: [Traffic Accidents in Helsinki](https://hri.fi/data/en_GB/dataset/liikenneonnettomuudet-helsingissa). 
+The maintainer of the dataset is Helsingin kaupunkiympäristön toimiala / Liikenne- ja katusuunnittelu. 
+The dataset has been downloaded from [Helsinki Region Infoshare](https://hri.fi/) service on 02.05.2026 under the license [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). 
+""")
 
 st.plotly_chart(plot_area(df_counts), width='stretch', theme=None)
 

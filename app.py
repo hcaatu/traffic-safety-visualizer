@@ -6,7 +6,7 @@ import streamlit as st
 # --- INITIALIZE DATA ---
 
 df = pd.read_csv(
-    "liikenneonnettomuudet_Helsingissa.csv", 
+    "data/liikenneonnettomuudet_Helsingissa.csv", 
     sep=";"
 )
 

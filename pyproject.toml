@@ -13,4 +13,5 @@ dependencies = [
     "plotly>=6.6.0",
     "statsmodels>=0.14.6",
     "streamlit>=1.57.0",
+    "streamlit-plotly-events>=0.0.6",
 ]

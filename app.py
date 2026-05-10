@@ -142,7 +142,7 @@ def plot_area(df):
         x="Year",
         y="count",
         color="Type of accident",
-        title="Accident trends per type"
+        title="Stacked Accident trends per type"
     )
 
     fig2.update_layout(uirevision="constant")
@@ -220,5 +220,5 @@ with st.expander("📊 Data Source"):
 chart_state = st.plotly_chart(plot_area(df_counts), width="content", theme=None)
 
 
-st.markdown("Area plot illustrating the trend of traffic accidents in Helsinki from 2000 to 2025. Toggle the types of accidents on or off by clicking the corresponding color")
+st.markdown("Stacked Area Plot illustrating the trend of traffic accidents in Helsinki from 2000 to 2025. Toggle the types of accidents on or off by clicking the corresponding color")
 

@@ -1,9 +1,7 @@
 import geopandas as gp
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
-from streamlit_plotly_events import plotly_events
 
 # --- INITIALIZE DATA ---
 
@@ -100,6 +98,14 @@ def plot_heatmap(gdf, geojson, zoom, center, radius, scatter=False):
                 hover_data=["Severity", "Year", "Type of accident"]
             ).data[0]
         )
+        fig.update_traces(
+            hovertemplate=(
+                "Severity: %{customdata[0]}<br>"
+                "Year: %{customdata[1]}<br>"
+                "Type of accident: %{customdata[2]}"
+                "<extra></extra>"
+            )
+        )
         
     else:
         fig = px.density_map(
@@ -113,6 +119,7 @@ def plot_heatmap(gdf, geojson, zoom, center, radius, scatter=False):
             opacity=1,
             color_continuous_scale="sunsetdark",
         )
+        fig.update_traces(hovertemplate=None, hoverinfo="skip")
 
     fig.update_layout(
         uirevision="constant",
@@ -121,8 +128,9 @@ def plot_heatmap(gdf, geojson, zoom, center, radius, scatter=False):
             title="Risk Factor",
             tickvals=[1, 2, 3],
             ticktext=["Low", "Medium", "High"],
-            yanchor="middle", y=0.5, # Vertical position
-            thickness=20, # Thickness of the bar
+            yanchor="middle", y=0.5, 
+            thickness=20, 
+            len=0.9
         )
     )
 
@@ -152,7 +160,7 @@ option = st.selectbox(
 start_year, end_year = st.select_slider("Filter by year", options=range(2000, 2024+1), value=(2000, 2024))
 
 scatter = st.checkbox(
-    "Show individual data points"
+    "Detail mode"
 )
 
 df = filter_by_accident_type(df, option)
@@ -188,7 +196,9 @@ st.plotly_chart(fig, width='stretch', theme=None)
 
 
 with st.expander("ℹ️ More info"):
-    st.markdown("""The Risk Factor is based on the severity of the accidents in that area. Hovering over individual data points shows additional information. Accident type reflects the weakest party involved.  
+    st.markdown("""The Risk Factor is based on the the amount of accidents in a given area weighed by their severity.""")
+    st.markdown("""In detail mode, individual data points are shown. By hovering over them, you can reveal additional information.""")
+    st.markdown("""Accident type (motor vehicle, pedestrian, etc) reflects the weakest party involved.  
     Severity of accidents is categorized into three groups:""")
     st.table(pd.DataFrame({
         "Property damage",
@@ -207,7 +217,8 @@ with st.expander("📊 Data Source"):
         The dataset has been downloaded from [Helsinki Region Infoshare](https://hri.fi/) service on 14.04.2026 under the license [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). 
         """)
 
-st.plotly_chart(plot_area(df_counts), width='stretch', theme=None)
+chart_state = st.plotly_chart(plot_area(df_counts), width="content", theme=None)
 
-st.markdown("Area plot illustrating the trend of traffic accidents in Helsinki from 2000 to 2025. Toggle the categories on or off from the sidebar")
+
+st.markdown("Area plot illustrating the trend of traffic accidents in Helsinki from 2000 to 2025. Toggle the types of accidents on or off by clicking the corresponding color")
 
